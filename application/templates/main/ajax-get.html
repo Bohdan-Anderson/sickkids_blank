@@ -1,0 +1,90 @@
+{% load staticfiles %}
+
+
+{%if meta.bk%}
+	<div class="background fullscreen fixed" style="background-image: url({{ MEDIA_URL }}{{meta.bk}});"></div>
+{%endif%}
+
+
+{% for section in data %}
+	<div id="{{section.slug}}" class="{%if section.bk%}background{%endif%} {%if section.fullPage%}full-page{%endif%}" {%if section.bk%}style="background-image: url({{ MEDIA_URL }}{{section.bk}});"{%endif%}>
+
+	{% if section.show_title %}
+		<div class="row">
+			<h2 class="absolute" style="left:{{section.coloum_start}}%; width:inherit;">{{section.title}}</h2>
+		</div>
+	{% endif %}
+
+	{%for row in section.rows%}
+		<div class="row">
+		
+		 {%for coloum in row%}
+			{% if coloum.paragraph %}
+				<div class="absolute" style="left:{{coloum.coloum_start}}%; width:{{coloum.coloum_width}}%;">
+					{% if coloum.show_title %}
+						<h2>{{coloum.title}}</h2>
+					{% endif %}
+					{% if coloum.show_subTitle %}
+						<h3>{{coloum.subTitle}}</h3>
+					{% endif %}
+					{{coloum.paragraph|safe}}
+				</div>
+
+			{% elif coloum.section %}
+				<div id="{{coloum.slug}}" class="absolute sub-section {%if coloum.bk%}background{%endif%}" style="left:{{coloum.coloum_start}}%; width:{{coloum.coloum_width}}%;" {%if coloum.bk%}style="background-image: url({{ MEDIA_URL }}{{coloum.bk}});"{%endif%}>
+				{% if coloum.show_title %}
+				<div class="sub-row">
+					<h2 class="absolute">{{coloum.title}}</h2>
+				</div>
+				{% endif %}
+
+				{% for subRow in coloum.content %}
+					<div class="sub-row">
+					{% for subSection in subRow %}
+					{% if subSection.paragraph %}
+						<div class="absolute" style="left:{{subSection.coloum_start}}%; width:{{subSection.coloum_width}}%;">
+						{% if subSection.show_title %}
+							<h2>{{subSection.title}}</h2>
+						{% endif %}
+						{% if subSection.show_subTitle %}
+							<h3>{{subSection.subTitle}}</h3>
+						{% endif %}
+						{{subSection.paragraph|safe}}
+						</div>
+						{% else %}
+							{% if subSection.show_downloader %}
+								<div class="absolute" style="left:{{subSection.coloum_start}}%; width:{{subSection.coloum_width}}%;" >
+									<img src="{{ MEDIA_URL }}{{subSection.image}}" alt="{{subSection.alternate_info}}" width="100%">	
+								<p>
+									<a href="{{ MEDIA_URL }}{{subSection.file_downloader}}" target="blank_">view</a> / <a href="{{ MEDIA_URL }}{{subSection.file_downloader}}" target="blank_" download>download</a>
+								</p>
+								</div>
+							{% else %}
+								<img class="absolute" src="{{ MEDIA_URL }}{{subSection.image}}" alt="{{subSection.alternate_info}}" style="left:{{subSection.coloum_start}}%; width:{{subSection.coloum_width}}%;">
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+					</div>
+				{% endfor %}
+
+				</div>
+
+			{% else %}
+				{% if coloum.show_downloader %}
+					<div class="absolute" style="left:{{coloum.coloum_start}}%; width:{{coloum.coloum_width}}%;" >
+						<img src="{{ MEDIA_URL }}{{coloum.image}}" alt="{{coloum.alternate_info}}" width="100%">	
+					<p>
+						<a href="{{ MEDIA_URL }}{{coloum.file_downloader}}" target="blank_">view</a> / <a href="{{ MEDIA_URL }}{{coloum.file_downloader}}" target="blank_" download>download</a>
+					</p>
+					</div>
+				{% else %}
+					<img class="absolute" src="{{ MEDIA_URL }}{{coloum.image}}" alt="{{coloum.alternate_info}}" style="left:{{coloum.coloum_start}}%; width:{{coloum.coloum_width}}%;">
+				{% endif %}
+			{% endif %}
+		{% endfor %}
+		</div>	
+	{% endfor %}
+
+</div>
+{% endfor %}
+
