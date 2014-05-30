@@ -2,6 +2,7 @@
 *.jpeg
 *.png
 *.gif
+*.ico
 *.pyc
 *.psd
 *.json
